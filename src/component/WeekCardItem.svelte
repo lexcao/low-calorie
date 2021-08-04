@@ -6,7 +6,7 @@
 </script>
 
 <div class="flex items-center">
-    <div class="pr-2 sm:pr-4 text-xs uppercase font-light text-gray-500">
+    <div class="pr-2 sm:pr-4 text-xs font-light text-gray-500">
         {label}
     </div>
     <div class="pr-2 sm:pr-4 text-xl font-bold">

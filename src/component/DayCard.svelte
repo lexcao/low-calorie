@@ -5,7 +5,7 @@
   export let label = ""
 </script>
 
-<div class="w-full lg:w-1/4">
+<div class="max-w-4xl w-full">
     <div class="widget w-full p-4 rounded-lg bg-white border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-col">

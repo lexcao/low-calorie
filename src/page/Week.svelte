@@ -26,8 +26,8 @@
 </div>
 
 <div class="flex items-center">
-    <div class="max-w-7xl w-full mx-auto py-6 sm:px-6 lg:px-8">
-        <div class="flex flex-col lg:flex-row w-full lg:space-x-2 space-y-2 lg:space-y-0 mb-2 lg:mb-4">
+    <div class="max-w-4xl w-full mx-auto py-6 sm:px-6">
+        <div class="flex flex-col w-full space-y-2 mb-2">
             {#each weeks as day}
                 <WeekCard oneDay={day}/>
             {/each}

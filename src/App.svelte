@@ -9,7 +9,7 @@
     @tailwind utilities;
 
     body {
-        @apply bg-gray-50
+        @apply bg-gray-50 min-w-0
     }
 </style>
 

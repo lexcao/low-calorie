@@ -9,7 +9,7 @@
 
 </script>
 
-<div class="w-full lg:w-1/4">
+<div class="w-full">
     <div class="absolute p-2">
         <span class={isToday?"text-indigo-700 font-bold" :""}>{dayOfWeek}</span>
     </div>
