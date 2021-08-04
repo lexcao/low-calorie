@@ -1,13 +1,14 @@
-# Low Calorie [低卡]
+# Low Calorie [低卡](https://cal.lexcao.io)
 
 随机生成每日菜谱，每周菜谱，低卡路里菜谱。 注意：当前是 MVP 版本，最小功能
 
 # Roadmap
 
 - [ ] 智能提醒，后台推送（功能）
-- [ ] 丰富的界面，H5（设计）
+- [x] 丰富的界面，H5（设计）
 - [ ] 丰富内容（产品）
 
+以下是 go 命令行版本，现已推出网页版，[前往体验](https://cal.lexcao.io)
 # Getting Started
 
 ```
