@@ -19,6 +19,7 @@ export const branding = {
     faviconIco: "/favicon.ico",
     appleTouch: "/apple-touch-icon.png",
     wordmark: "/brand/wordmark-light.svg",
+    wordmarkDark: "/brand/wordmark-dark.svg",
     ogImage: "/og.png",
   },
 }

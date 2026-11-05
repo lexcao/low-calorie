@@ -3,6 +3,7 @@
 // Run via `npm run generate` (also hooked to prebuild and predev).
 
 import {copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync} from "fs"
+import {spawnSync} from "child_process"
 import {dirname, join} from "path"
 import {fileURLToPath} from "url"
 import {Resvg} from "@resvg/resvg-js"
@@ -55,41 +56,36 @@ const jsonLd = {
 }
 
 const headerHtml = `
-<header class="px-4 pt-6 sm:pt-10">
+<header class="mast">
   <h1>
-    <img class="brand-wordmark" src="${escapeHtml(wordmarkSrc)}" alt="${escapeHtml(branding.fullName)}" width="520" height="200">
+    <img class="brand-wordmark mark-light" src="${escapeHtml(wordmarkSrc)}" alt="${escapeHtml(branding.fullName)}" width="520" height="200">
+    <img class="brand-wordmark mark-dark" src="${escapeHtml(versioned(branding.icons.wordmarkDark))}" alt="" width="520" height="200">
   </h1>
 </header>`.trim()
 
 const appHtml = `
 <div id="app" aria-busy="true">
-  <div class="px-4 pt-4 pb-4">
-    <div class="max-w-7xl mx-auto text-center">
-      <p class="mt-3 text-base text-gray-600 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:text-xl">${escapeHtml(branding.tagline)}</p>
-      <div class="mt-5 sm:mt-8 sm:flex sm:justify-center">
-        <div class="rounded-md shadow">
-          <a href="/#/day" class="w-full inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">一天</a>
-        </div>
-        <div class="mt-3 sm:mt-0 sm:ml-3">
-          <a href="/#/week" class="w-full inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10">一周</a>
-        </div>
-      </div>
-      <p class="mt-8 text-gray-600">正在打开菜谱生成器。不开启 JavaScript 时，仍可阅读下方说明。</p>
+  <div class="stage">
+    <p class="tagline">${escapeHtml(branding.tagline)}</p>
+    <div class="actions">
+      <a class="btn btn-ink" href="/#/day">抽一天</a>
+      <a class="btn" href="/#/week">抽一周</a>
     </div>
+    <p class="quiet">抽签需要 JavaScript。下面的说明可以直接阅读。</p>
   </div>
 </div>`.trim()
 
 const aboutHtml = `
-<section id="about" class="px-4 pb-16">
-  <div class="max-w-3xl mx-auto border-t border-gray-200 pt-10 text-gray-700">
+<section id="about" class="essay">
+  <div>
     <h2 class="text-2xl font-bold text-gray-900">这个页面做什么</h2>
     <p class="mt-3 leading-7">${escapeHtml(branding.description)}</p>
     <p class="mt-3 leading-7">早餐从早餐清单里抽一项。午餐和晚餐各自包含一种烹饪方式，以及肉类或蛋、蔬菜、主食、水果各一项。清单是项目里现成的数据，页面不会另外编造食材。</p>
     <h2 class="mt-8 text-2xl font-bold text-gray-900">怎么使用</h2>
     <ol class="mt-3 list-decimal pl-5 leading-7 space-y-2">
-      <li>选择「一天」，查看打开页面这一天的早餐、午餐和晚餐。</li>
-      <li>选择「一周」，按周日到周六列出七天。</li>
-      <li>选择「试试好运」，只在首页多看一餐。</li>
+      <li>选择「抽一天」，查看打开页面这一天的早餐、午餐和晚餐。</li>
+      <li>选择「抽一周」，按周日到周六列出七天。</li>
+      <li>选择「抽一餐」，只在首页看一餐。</li>
     </ol>
     <p class="mt-3 leading-7">不需要注册。刷新后组合会重新随机。生成菜谱需要 JavaScript，这一节说明不需要。</p>
     <h2 class="mt-8 text-2xl font-bold text-gray-900">常见问题</h2>
@@ -111,8 +107,8 @@ const aboutHtml = `
         <p class="mt-1 leading-7">以打开页面的日期所在的那一周，从周日排到周六。每一天的菜都是当场随机的，和日期没有固定对应关系。</p>
       </div>
       <div>
-        <h3 class="text-lg font-semibold text-gray-900">「试试好运」和「一天」有什么区别？</h3>
-        <p class="mt-1 leading-7">「试试好运」只生成一餐，留在首页。「一天」会给出早餐、午餐和晚餐。</p>
+        <h3 class="text-lg font-semibold text-gray-900">「抽一餐」和「抽一天」有什么区别？</h3>
+        <p class="mt-1 leading-7">「抽一餐」只生成一餐，留在首页。「抽一天」会给出早餐、午餐和晚餐。</p>
       </div>
     </div>
     <p class="mt-8 text-sm text-gray-600">站点地址：${escapeHtml(branding.url)}</p>
@@ -292,7 +288,38 @@ if (ink < 400) {
 const ogPng = rendered.asPng()
 writeFileSync(join(publicDir, "og.png"), ogPng)
 
-console.log(`generated html, robots, sitemap, icons, and og.png (${ogPng.length} bytes) for ${hostLabel}`)
+copyFileSync(join(root, "src", "stage.css"), join(publicDir, "stage.css"))
+subsetPageFont(`${html}\n${readFileSync(join(root, "src", "stage.css"), "utf8")}`)
+
+console.log(`generated html, robots, sitemap, icons, stage.css, and og.png (${ogPng.length} bytes) for ${hostLabel}`)
+
+function subsetPageFont(text) {
+  const probe = spawnSync("python3", ["-m", "fontTools.subset", "--help"], {encoding: "utf8"})
+  if (probe.error || probe.status !== 0) {
+    console.warn("fontTools is not installed; keeping the committed webfonts")
+    return
+  }
+  const dir = join(publicDir, "fonts")
+  mkdirSync(dir, {recursive: true})
+  const jobs = [
+    ["NotoSansSC-Regular.ttf", "sans-400.woff2"],
+    ["NotoSansSC-Bold.ttf", "sans-700.woff2"],
+    ["NotoSansSC-Latin-Regular.ttf", "latin-400.woff2"],
+    ["NotoSansSC-Latin-Bold.ttf", "latin-700.woff2"],
+  ]
+  for (const [src, out] of jobs) {
+    const result = spawnSync("python3", [
+      "-m", "fontTools.subset",
+      join(root, "scripts", "fonts", src),
+      `--text=${text}`,
+      "--flavor=woff2",
+      `--output-file=${join(dir, out)}`,
+    ], {encoding: "utf8"})
+    if (result.status !== 0) {
+      throw new Error(`font subset failed for ${src}: ${result.stderr || result.stdout}`)
+    }
+  }
+}
 
 function pngsToIco(images) {
   const header = Buffer.alloc(6)
