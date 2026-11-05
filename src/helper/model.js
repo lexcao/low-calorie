@@ -1,5 +1,5 @@
 import {randomArray} from "./utils";
-import {breakfast, carbohydrate, cooking, fruit, meat, vegetable} from "./data";
+import {breakfast, carbohydrate, cooking, fruit, meat, vegetable} from "./data.mjs";
 
 export class Meal {
   constructor () {
