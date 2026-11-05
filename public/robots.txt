@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cal.lexcao.io/sitemap.xml

@@ -6,26 +6,18 @@
   export let oneDay = new OneDay()
   const isToday = oneDay.time.getDate() === new Date().getDate()
   const dayOfWeek = weeks[oneDay.time.getDay()]
-
 </script>
 
 <div class="w-full">
-    <div class="absolute p-2">
-        <span class={isToday?"text-indigo-700 font-bold" :""}>{dayOfWeek}</span>
+  <div class="w-full p-4 rounded-lg bg-white border border-gray-100">
+    <div class="mb-3 text-sm {isToday ? 'text-indigo-700 font-bold' : 'text-gray-700'}">{dayOfWeek}</div>
+    <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
+      <div class="flex items-center gap-2">
+        <div class="text-sm text-gray-600">早餐</div>
+        <div class="text-lg font-bold">{oneDay.breakfast}</div>
+      </div>
+      <WeekCardItem label="午餐" meal={oneDay.lunch}/>
+      <WeekCardItem label="晚餐" meal={oneDay.dinner}/>
     </div>
-    <div class="widget w-full p-4 rounded-lg bg-white border border-gray-100 dark:bg-gray-900 dark:border-gray-800">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center">
-                <div class="pr-2 sm:pr-4 text-xs uppercase font-light text-gray-500">
-                    早餐
-                </div>
-                <div class="text-xl font-bold">
-                    {oneDay.breakfast}
-                </div>
-            </div>
-
-            <WeekCardItem label="午餐" meal={oneDay.lunch}/>
-            <WeekCardItem label="晚餐" meal={oneDay.dinner}/>
-        </div>
-    </div>
+  </div>
 </div>

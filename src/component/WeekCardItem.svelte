@@ -5,17 +5,12 @@
   export let meal = new Meal()
 </script>
 
-<div class="flex items-center">
-    <div class="pr-2 sm:pr-4 text-xs font-light text-gray-500">
-        {label}
-    </div>
-    <div class="pr-2 sm:pr-4 text-xl font-bold">
-        {meal.cooking}
-    </div>
-    <div class="flex flex-col">
-        <span>{meal.meat}</span>
-        <span>{meal.vegetable}</span>
-        <span>{meal.carbohydrate}</span>
-        <span>{meal.fruit}</span>
-    </div>
+<div class="min-w-0 sm:max-w-xs">
+  <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+    <div class="text-sm text-gray-600">{label}</div>
+    <div class="text-lg font-bold">{meal.cooking}</div>
+  </div>
+  <div class="mt-1 leading-6 text-gray-800 break-words">
+    {meal.meat} / {meal.vegetable} / {meal.carbohydrate} / {meal.fruit}
+  </div>
 </div>
